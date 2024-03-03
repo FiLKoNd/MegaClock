@@ -2,11 +2,13 @@ package com.filkond.megaclock.utils;
 
 import lombok.Getter;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Getter
-public enum Numbers {
+public enum Characters {
+    COLON(new boolean[][]{
+            {true},
+            {false},
+            {true}
+    }),
     ONE(new boolean[][]{
             {false, true, false},
             {true, true, false},
@@ -26,7 +28,7 @@ public enum Numbers {
 
     private final boolean[][] blocks;
 
-    Numbers(boolean[][] blocks) {
+    Characters(boolean[][] blocks) {
         this.blocks = blocks;
     }
 }

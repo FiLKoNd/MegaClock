@@ -3,3 +3,6 @@ version: '${version}'
 main: com.filkond.megaclock.MegaClock
 api-version: '1.20'
 authors: [FiLKoNd, Delyfsss]
+commands:
+  clock:
+    description: "a"
