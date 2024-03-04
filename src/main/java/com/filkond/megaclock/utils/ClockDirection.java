@@ -11,8 +11,11 @@ public enum ClockDirection {
     NORTH(BlockFace.NORTH, 1, 0, 0),
     EAST(BlockFace.EAST, 0, 0, 1),
     SOUTH(BlockFace.SOUTH, -1, 0, 0),
-    WEST(BlockFace.WEST, 0, 0, -1)
-
+    WEST(BlockFace.WEST, 0, 0, -1),
+    NORTH_EAST(NORTH, EAST, BlockFace.NORTH_EAST),
+    NORTH_WEST(NORTH, WEST, BlockFace.NORTH_WEST),
+    SOUTH_EAST(SOUTH, EAST, BlockFace.SOUTH_EAST),
+    SOUTH_WEST(SOUTH, WEST, BlockFace.SOUTH_WEST)
     ;
 
 
@@ -26,6 +29,13 @@ public enum ClockDirection {
         this.modX = modX;
         this.modY = modY;
         this.modZ = modZ;
+    }
+
+    ClockDirection(final ClockDirection face1, final ClockDirection face2, BlockFace blockFace) {
+        this.modX = face1.getModX() + face2.getModX();
+        this.modY = face1.getModY() + face2.getModY();
+        this.modZ = face1.getModZ() + face2.getModZ();
+        this.face = blockFace;
     }
 
     @Nullable
