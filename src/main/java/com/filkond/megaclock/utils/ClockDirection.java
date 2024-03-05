@@ -1,7 +1,6 @@
 package com.filkond.megaclock.utils;
 
 import lombok.Getter;
-import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 
 import javax.annotation.Nullable;

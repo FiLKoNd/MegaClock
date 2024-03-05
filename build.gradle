@@ -26,6 +26,17 @@ dependencies {
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.30'
 }
 
+tasks.register('copyJarToBin', Copy) {
+    from jar.archiveFile
+    into "D:/server/Paper 1.20.2/plugins"
+}
+
+tasks.named("build").configure {
+    finalizedBy {
+        copyJarToBin
+    }
+}
+
 def targetJavaVersion = 17
 java {
     def javaVersion = JavaVersion.toVersion(targetJavaVersion)
