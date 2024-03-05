@@ -1,8 +1,5 @@
 package com.filkond.megaclock.utils;
 
-import lombok.Getter;
-
-@Getter
 public enum Characters {
     COLON(new boolean[][]{
             {true},
@@ -25,6 +22,10 @@ public enum Characters {
     })
 
     ;
+
+    public boolean[][] getBlocks() {
+        return blocks;
+    }
 
     private final boolean[][] blocks;
 
