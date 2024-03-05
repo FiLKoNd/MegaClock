@@ -10,41 +10,46 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class ClockCommand implements CommandExecutor {
+import java.util.List;
+
+public class ClockCommand implements ICommand {
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (!(sender instanceof Player player)) {
-            return true;
-        }
-
-        if (args.length < 3) {
-            return true;
-        }
-
-        var world = player.getWorld();
-        var face = player.getFacing();
-        BlockFace oppositeFace = face.getOppositeFace();
-        var cf = ClockDirection.getDirection(oppositeFace);
-        int cx = Integer.parseInt(args[0]);
-        int cy = Integer.parseInt(args[1]);
-        int cz = Integer.parseInt(args[2]);
-        Location location = new Location(player.getWorld(), cx, cy, cz);
-        int x = location.getBlockX() + cf.getModX();
-        int y = location.getBlockY();
-        int z = location.getBlockZ() + cf.getModZ();
-        for (boolean[] block : Characters.ONE.getBlocks()) {
-            y--;
-            for (boolean b : block) {
-                x -= cf.getModX();
-                z -= cf.getModZ();
-                if (b) {
-                    world.getBlockAt(x, y, z).setType(Material.STONE);
-                }
+    public void execute(CommandSender sender, String[] args) {
+        {
+            if (!(sender instanceof Player player)) {
+                return;
             }
-            x = location.getBlockX() + cf.getModX();
-            z = location.getBlockZ() + cf.getModZ();
-        }
 
-        return true;
+            if (args.length < 3) {
+                return;
+            }
+
+            var world = player.getWorld();
+            var face = player.getFacing();
+            ClockDirection cf = ClockDirection.getDirection(face.getOppositeFace());
+            int cx = Integer.parseInt(args[0]);
+            int cy = Integer.parseInt(args[1]);
+            int cz = Integer.parseInt(args[2]);
+            Location location = new Location(player.getWorld(), cx, cy, cz);
+            int x = location.getBlockX() + cf.getModVX();
+            int y = location.getBlockY();
+            int z = location.getBlockZ() + cf.getModVZ();
+            for (boolean[] block : Characters.ONE.getBlocks()) {
+                for (boolean b : block) {
+                    x -= cf.getModVX();
+                    z -= cf.getModVZ();
+                    if (b) {
+                        world.getBlockAt(x, y, z).setType(Material.STONE);
+                    }
+                }
+                x = location.getBlockX() + cf.getModVX();
+                z = location.getBlockZ() + cf.getModVZ();
+            }
+        }
+    }
+
+    @Override
+    public List<String> complete(CommandSender sender, String[] args) {
+        return null;
     }
 }
