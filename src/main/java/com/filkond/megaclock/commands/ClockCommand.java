@@ -1,9 +1,7 @@
 package com.filkond.megaclock.commands;
 
-import com.filkond.megaclock.rotator.Rotator;
 import com.filkond.megaclock.utils.Characters;
 import com.filkond.megaclock.utils.ClockDirection;
-import com.filkond.megaclock.utils.ClockPose;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
@@ -25,7 +23,6 @@ public class ClockCommand implements ICommand {
         var world = player.getWorld();
         var face = player.getFacing();
         ClockDirection clockDirection = ClockDirection.getDirection(face.getOppositeFace());
-        var rotator = Rotator.get(clockDirection, ClockPose.GROUNDED);
         int cx = Integer.parseInt(args[0]);
         int cy = Integer.parseInt(args[1]);
         int cz = Integer.parseInt(args[2]);
@@ -34,19 +31,16 @@ public class ClockCommand implements ICommand {
         int y = location.getBlockY();
         int z = location.getBlockZ();
         for (boolean[] block : Characters.ONE.getBlocks()) {
-            x += rotator.getLineModX(); // 0
-            y += rotator.getLineModY(); // -1
-            z += rotator.getLineModZ(); // 0
+            y--;
             for (boolean b : block) {
-                x += rotator.getSideModX();
-                z += rotator.getSideModZ();
+                x += clockDirection.getModVX();
+                z += clockDirection.getModVZ();
                 if (b) {
                     world.getBlockAt(x, y, z).setType(Material.STONE);
                 }
             }
-            x = rotator.getStartX();
-            y = rotator.getStartY();
-            z = rotator.getStartZ();
+            x = location.getBlockX();
+            z = location.getBlockZ();
         }
     }
 

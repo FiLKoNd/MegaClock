@@ -1,9 +1,7 @@
 package com.filkond.megaclock.object;
 
 import com.filkond.megaclock.builder.ClockBuilder;
-import com.filkond.megaclock.rotator.Rotator;
 import com.filkond.megaclock.utils.ClockDirection;
-import com.filkond.megaclock.utils.ClockPose;
 import org.bukkit.Location;
 import org.bukkit.Material;
 
@@ -19,13 +17,13 @@ public class ClockObject {
     private final ClockBuilder builder;
     private final ZonedDateTime time;
 
-    public ClockObject(String name, List<Material> materials, List<Material> backgroundMaterials, int offset, Location startLocation, ZonedDateTime time, ClockDirection direction, ClockPose pose) {
+    public ClockObject(String name, List<Material> materials, List<Material> backgroundMaterials, int offset, Location startLocation, ZonedDateTime time, ClockDirection direction) {
         this.name = name;
         this.materials = materials;
         this.backgroundMaterials = backgroundMaterials;
         this.offset = offset;
         this.startLocation = startLocation;
-        this.builder = new ClockBuilder(startLocation, Rotator.get(direction, pose), materials);
+        this.builder = new ClockBuilder(startLocation, materials);
         this.time = time;
     }
 
