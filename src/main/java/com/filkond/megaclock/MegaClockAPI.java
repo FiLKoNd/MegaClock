@@ -27,6 +27,22 @@ public final class MegaClockAPI {
         return null;
     }
 
+    public MessagesConfig getMessages() {
+        return messages;
+    }
+
+    public SettingsConfig getSettings() {
+        return settings;
+    }
+
+    public DataConfig getData() {
+        return data;
+    }
+
+    public List<ClockObject> getClocks() {
+        return clocks;
+    }
+
     @Nonnull
     public static MegaClockAPI getInstance() {
         if (INSTANCE == null) {
