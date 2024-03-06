@@ -1,4 +1,7 @@
 not-enough-args: "Недостаточно аргументов"
+number-format-error: "Вы должны ввести число"
 help-message:
-  - "Помощь: "
-  - ""
+  - "&fПомощь: "
+  - "&b/clock create X Y Z <Название> <VERT/HORIZ> <BlockFace> <TIMEZONE>"
+  - "&b/clock timezone <Название> <TIMEZONE>"
+  - "&b/clock destroy <Название>"

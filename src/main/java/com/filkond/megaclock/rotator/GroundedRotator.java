@@ -2,11 +2,13 @@ package com.filkond.megaclock.rotator;
 
 import com.filkond.megaclock.utils.ClockDirection;
 import com.filkond.megaclock.utils.ClockPose;
+import org.bukkit.Location;
+import org.jetbrains.annotations.NotNull;
 
-public class VertRotator extends Rotator {
+public class GroundedRotator extends Rotator {
 
-    protected VertRotator(ClockDirection direction) {
-        super(direction, ClockPose.VERTICAL);
+    protected GroundedRotator(ClockDirection direction) {
+        super(direction, ClockPose.GROUNDED);
     }
 
     @Override
@@ -16,7 +18,7 @@ public class VertRotator extends Rotator {
 
     @Override
     public int getLineModY() {
-        return -1;
+        return 0;
     }
 
     @Override
@@ -26,11 +28,11 @@ public class VertRotator extends Rotator {
 
     @Override
     public int getSideModX() {
-        return direction.getModGSX();
+        return direction.getModGLX();
     }
 
     @Override
     public int getSideModZ() {
-        return direction.getModGSZ();
+        return direction.getModGLZ();
     }
 }

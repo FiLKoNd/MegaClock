@@ -4,8 +4,8 @@ import com.filkond.megaclock.config.DataConfig;
 import com.filkond.megaclock.config.MessagesConfig;
 import com.filkond.megaclock.config.SettingsConfig;
 import com.filkond.megaclock.object.ClockObject;
+import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +43,7 @@ public final class MegaClockAPI {
         return clocks;
     }
 
-    @Nonnull
+    @NotNull
     public static MegaClockAPI getInstance() {
         if (INSTANCE == null) {
             INSTANCE = new MegaClockAPI();

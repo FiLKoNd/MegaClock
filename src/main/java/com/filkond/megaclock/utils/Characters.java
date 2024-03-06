@@ -2,9 +2,11 @@ package com.filkond.megaclock.utils;
 
 public enum Characters {
     COLON(new boolean[][]{
+            {false},
             {true},
             {false},
-            {true}
+            {true},
+            {false}
     }),
     ONE(new boolean[][]{
             {false, true, false},
