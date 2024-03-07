@@ -12,6 +12,6 @@ public class ClockBuilder extends Builder {
 
     @Override
     public void build() {
-        
+
     }
 }

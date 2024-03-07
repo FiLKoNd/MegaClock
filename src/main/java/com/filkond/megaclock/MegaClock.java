@@ -3,8 +3,9 @@ package com.filkond.megaclock;
 import com.filkond.megaclock.commands.ClockCommand;
 import com.filkond.megaclock.commands.ICommand;
 import com.filkond.megaclock.commands.sub.CreateCommand;
+import com.filkond.megaclock.commands.sub.DestroyCommand;
+import com.filkond.megaclock.commands.sub.TimezoneCommand;
 import com.filkond.megaclock.tasks.ClockTask;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.HashMap;
@@ -22,6 +23,8 @@ public final class MegaClock extends JavaPlugin {
     private void setupCommands() {
         getCommand("clock").setExecutor(new ClockCommand());
         subcommands.put("create", new CreateCommand());
+        subcommands.put("timezone", new TimezoneCommand());
+        subcommands.put("destroy", new DestroyCommand());
     }
 
     @Override
