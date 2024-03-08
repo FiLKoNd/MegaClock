@@ -4,6 +4,7 @@ import com.filkond.megaclock.builder.ClockBuilder;
 import com.filkond.megaclock.utils.ClockDirection;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.checkerframework.common.value.qual.ArrayLen;
 
 import java.time.ZonedDateTime;
 import java.util.List;
@@ -15,16 +16,19 @@ public class ClockObject {
     private final int offset;
     private final Location startLocation;
     private final ClockBuilder builder;
-    private final ZonedDateTime time;
+    @ArrayLen(10)
+    private char[] timeChars; // 12:12:12PM
+    private final ZonedDateTime zonedDateTime;
 
-    public ClockObject(String name, List<Material> materials, List<Material> backgroundMaterials, int offset, Location startLocation, ZonedDateTime time, ClockDirection direction) {
+    public ClockObject(String name, List<Material> materials, List<Material> backgroundMaterials, int offset, Location startLocation, ZonedDateTime zonedDateTime, ClockDirection direction) {
         this.name = name;
         this.materials = materials;
         this.backgroundMaterials = backgroundMaterials;
         this.offset = offset;
         this.startLocation = startLocation;
         this.builder = new ClockBuilder(startLocation, materials);
-        this.time = time;
+        this.zonedDateTime = zonedDateTime;
+        update();
     }
 
     public void update() {
@@ -47,7 +51,7 @@ public class ClockObject {
         return startLocation;
     }
 
-    public ZonedDateTime getTime() {
-        return time;
+    public ZonedDateTime getZonedDateTime() {
+        return zonedDateTime;
     }
 }

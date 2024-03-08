@@ -1,11 +1,32 @@
 package com.filkond.megaclock.utils;
 
+import com.filkond.megaclock.MegaClock;
+import org.bukkit.Location;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
+
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.awt.image.ColorModel;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class FontUtils {
+    public static final Font defaultFont;
+
+    static {
+        try {
+            defaultFont = Font.createFont(Font.TRUETYPE_FONT, new File(MegaClock.getInstance().getDataFolder(), "fonts/minecraft-numbers.ttf"))
+                    .deriveFont(5F);
+        } catch (FontFormatException | IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public static BufferedImage getImage(String text, Font font) {
-        var fm = getFontMetrics(text, font);
+        var fm = getFontMetrics(font);
         var img = new BufferedImage(fm.stringWidth(text), fm.getHeight(), BufferedImage.TYPE_INT_RGB);
         var g2d = img.createGraphics();
         g2d = img.createGraphics();
@@ -17,7 +38,26 @@ public class FontUtils {
         return img;
     }
 
-    private static FontMetrics getFontMetrics(String text, Font font) {
+    public static List<Block> getBlocks(Location loc, BufferedImage image, ClockDirection direction) {
+        List<Block> out = new ArrayList<>();
+        for (int x = 0; x < image.getWidth(); x++) {
+            for (int y = 0; y < image.getHeight(); y++) {
+                int rgb = image.getRGB(x, y);
+                int red = (rgb & 0xff0000) >> 16;
+                int green = (rgb & 0xff00) >> 8;
+                int blue = rgb & 0xff;
+                if (red != 0 || green != 0 || blue != 0) {
+                    int xLoc = x * direction.getModVX();
+                    int zLoc = x * direction.getModVZ();
+                    Block block = loc.clone().add(xLoc, -y, zLoc).getBlock();
+                    out.add(block);
+                }
+            }
+        }
+        return out;
+    }
+
+    private static FontMetrics getFontMetrics(Font font) {
         var bimg = new BufferedImage(1, 1, BufferedImage.TYPE_INT_RGB);
         var g2d = bimg.createGraphics();
         g2d.setFont(font);

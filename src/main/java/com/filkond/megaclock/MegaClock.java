@@ -8,6 +8,9 @@ import com.filkond.megaclock.commands.sub.TimezoneCommand;
 import com.filkond.megaclock.tasks.ClockTask;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.awt.*;
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 
 public final class MegaClock extends JavaPlugin {
@@ -16,10 +19,12 @@ public final class MegaClock extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        saveResource("fonts/minecraft-numbers.ttf", false);
         INSTANCE = this;
         setupCommands();
         new ClockTask().runTaskTimerAsynchronously(this, 20L, 0L);
     }
+
     private void setupCommands() {
         getCommand("clock").setExecutor(new ClockCommand());
         subcommands.put("create", new CreateCommand());
