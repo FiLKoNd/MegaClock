@@ -1,5 +1,9 @@
 not-enough-args: "Недостаточно аргументов"
 number-format-error: "Вы должны ввести число"
+block-face-error: "неверный аргумент blockface"
+already-exists: "часы с таким названием уже существуют"
+unknown-timezone: "неизвестная часовая зона"
+successfully-created: "вы успешно создали часы"
 help-message:
   - "&fПомощь: "
   - "&b/clock create X Y Z <Название> <VERT/HORIZ> <BlockFace> <TIMEZONE>"
