@@ -3,6 +3,7 @@ package com.filkond.megaclock.utils;
 import com.filkond.megaclock.MegaClockAPI;
 import org.bukkit.ChatColor;
 
+import java.time.ZonedDateTime;
 import java.util.List;
 
 public class Translator {
@@ -24,5 +25,9 @@ public class Translator {
         return messages.stream()
                 .map(Translator::colorize)
                 .toList();
+    }
+
+    public static String formatTime(ZonedDateTime time) {
+        return String.format("%d:%d:%d", time.getHour(), time.getMinute(), time.getSecond());
     }
 }

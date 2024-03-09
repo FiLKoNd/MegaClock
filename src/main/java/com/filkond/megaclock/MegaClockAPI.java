@@ -1,17 +1,18 @@
 package com.filkond.megaclock;
 
-import com.filkond.megaclock.builder.ClockBuilder;
+import com.filkond.megaclock.clock.ClockBuilder;
 import com.filkond.megaclock.config.DataConfig;
 import com.filkond.megaclock.config.MessagesConfig;
 import com.filkond.megaclock.config.SettingsConfig;
-import com.filkond.megaclock.object.ClockObject;
+import com.filkond.megaclock.clock.ClockObject;
 import com.filkond.megaclock.utils.ClockDirection;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
-import java.time.ZonedDateTime;
+import java.awt.*;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,9 +33,9 @@ public final class MegaClockAPI {
         return null;
     }
 
-    public ClockObject createClock(String name, Location location, ZonedDateTime time, ClockDirection direction, boolean bg, boolean frame) {
-        var builder = new ClockBuilder(location, direction, bg, frame, List.of(Material.STONE), List.of(Material.COBBLESTONE));
-        var clock = new ClockObject(name, location, time, builder);
+    public ClockObject createClock(String name, Location location, ZoneId zoneId, ClockDirection direction, Font font, boolean bg, boolean frame) {
+        var builder = new ClockBuilder(frame, bg, location, direction, font, List.of(Material.STONE), List.of(Material.COBBLESTONE));
+        var clock = new ClockObject(name, location, zoneId, builder);
         clocks.add(clock);
         return clock;
     }

@@ -1,3 +1,5 @@
+import com.filkond.megaclock.utils.Translator;
+
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.io.File;
@@ -24,9 +26,7 @@ public class Main {
     }
 
     private static void printTimes() {
-        for (String id : ZoneId.getAvailableZoneIds()) {
-            ZonedDateTime zdt = ZonedDateTime.now(ZoneId.of(id));
-            System.out.println(id + zdt.getHour() + ":" + zdt.getMinute());
-        }
+        var zdt = ZonedDateTime.now(ZoneId.of("Europe/Moscow"));
+        System.out.println(Translator.formatTime(zdt));
     }
 }

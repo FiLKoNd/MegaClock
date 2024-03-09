@@ -57,6 +57,27 @@ public class FontUtils {
         return out;
     }
 
+    public static Location getCharLocation(int index, Location location, ClockDirection direction, Font font, String text) {
+        if (index < 0 || index >= text.length()) {
+            throw new IllegalArgumentException("Index must been less then text length");
+        }
+
+
+        var fm = FontUtils.getFontMetrics(font);
+        int charWidth = fm.charWidth(text.charAt(index));
+
+
+        int x = index * charWidth;
+        int xLoc = x * direction.getModVX();
+        int zLoc = x * direction.getModVZ();
+
+        var loc = location.clone();
+        loc.setX(loc.getX() + xLoc);
+        loc.setZ(loc.getZ() + zLoc);
+
+        return loc;
+    }
+
     private static FontMetrics getFontMetrics(Font font) {
         var bimg = new BufferedImage(1, 1, BufferedImage.TYPE_INT_RGB);
         var g2d = bimg.createGraphics();

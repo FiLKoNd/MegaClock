@@ -34,11 +34,15 @@ public class ClockCommand implements ICommand {
         var face = player.getFacing();
         var clockDirection = ClockDirection.getDirection(face.getOppositeFace());
         Location location = new Location(player.getWorld(), cx, cy, cz);
-        var bl = FontUtils.getBlocks(location, FontUtils.getImage("12", FontUtils.defaultFont), clockDirection);
+        var bl = FontUtils.getBlocks(location, FontUtils.getImage("123", FontUtils.defaultFont), clockDirection);
         for (Block block : bl) {
             block.setType(Material.STONE);
         }
-
+        var charLoc = FontUtils.getCharLocation(1, location, clockDirection, FontUtils.defaultFont, "123");
+        var charBlocks = FontUtils.getBlocks(charLoc, FontUtils.getImage("9", FontUtils.defaultFont), clockDirection);
+        for (Block charBlock : charBlocks) {
+            charBlock.setType(Material.REDSTONE_BLOCK);
+        }
     }
 
     @Override

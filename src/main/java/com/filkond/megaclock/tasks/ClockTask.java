@@ -1,7 +1,7 @@
 package com.filkond.megaclock.tasks;
 
 import com.filkond.megaclock.MegaClockAPI;
-import com.filkond.megaclock.object.ClockObject;
+import com.filkond.megaclock.clock.ClockObject;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class ClockTask extends BukkitRunnable {
