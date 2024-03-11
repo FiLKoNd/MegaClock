@@ -12,9 +12,9 @@ successful-destroyed: "вы уебали часы"
 
 help-message:
   - "&fПомощь: "
-  - "&b/clock create X Y Z <Название> <Background> <Frame> <CLOCKFACE> <FONT>"
+  - "&b/clock create X Y Z <Название> <Background> <Frame> <FONT_SIZE> <FONT>"
   - "&b/clock timezone <Название> <TimeZone>"
   - "&b/clock destroy <Название>"
-  - "&b/clock material CLOCK FIELD add/set MATERIALS (можно через запятую)"
+  - "&b/clock material <clock> <field> add/set <materials> (можно через запятую)"
   - "&fАргументы написанные капсом - опциональны"
   - "&fПоддерживаются любые шрифты"
