@@ -6,24 +6,19 @@ import com.filkond.megaclock.utils.ClockDirection;
 import com.filkond.megaclock.utils.FontUtils;
 import com.filkond.megaclock.utils.Translator;
 import org.bukkit.Location;
-import org.bukkit.block.BlockFace;
-import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
 import java.time.DateTimeException;
 import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.time.zone.ZoneRulesException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class CreateCommand implements ICommand {
-    @Override // /clock create X Y Z NAME TIMEZONE BG FRAME ClockFace Font
+    @Override // /clock create X Y Z NAME TIMEZONE BG FRAME SIZE Font
     public void execute(CommandSender sender, String[] args) {
         if (!(sender instanceof Player player)) {
             return;
@@ -46,14 +41,6 @@ public class CreateCommand implements ICommand {
 
         var location = new Location(player.getWorld(), x, y, z);
         ClockDirection direction = ClockDirection.getDirection(player.getFacing().getOppositeFace());
-        if (args.length == 9) {
-            try {
-                direction = ClockDirection.valueOf(args[8].toUpperCase());
-            } catch (IllegalArgumentException exception) {
-                player.sendMessage(Translator.of("block-face-error"));
-                return;
-            }
-        }
 
         String name = args[4];
         var api = MegaClockAPI.getInstance();
@@ -70,18 +57,30 @@ public class CreateCommand implements ICommand {
             return;
         }
 
-        Font font = FontUtils.defaultFont;
+        float size = FontUtils.defaultFont.getSize();
+        if (args.length > 8) {
+            try {
+                size = Integer.parseInt(args[8]);
+            } catch (NumberFormatException ignored) {
+                player.sendMessage(Translator.of("number-format-error"));
+                return;
+            }
+        }
+
+        Font font = FontUtils.defaultFont.deriveFont(size);
         if (args.length > 9) {
             StringBuilder sb = new StringBuilder();
             for (int i = 8; i < args.length; i++) {
                 sb.append(args[i]);
                 sb.append(" ");
             }
-            font = Font.getFont(sb.toString().replaceAll(" $", ""));
-            if (font == null) {
+            var fontName = sb.toString().replaceAll(" $", "");
+            var tempFont = FontUtils.getFont(fontName, (int) size);
+            if (tempFont == null) {
                 player.sendMessage(Translator.of("unknown-font"));
                 return;
             }
+            font = tempFont;
         }
 
         boolean bg = Boolean.parseBoolean(args[6]);
@@ -91,6 +90,7 @@ public class CreateCommand implements ICommand {
     }
 
     @Override
+    @Nullable
     public List<String> complete(CommandSender sender, String[] args) {
         List<String> out = new ArrayList<>();
         if (!(sender instanceof Player player)) {
@@ -113,16 +113,13 @@ public class CreateCommand implements ICommand {
                 return ZoneId.getAvailableZoneIds()
                         .stream()
                         .filter(s -> s.startsWith(args[5]))
-                        .collect(Collectors.toList());
+                        .toList();
             }
             case 7, 8 -> {
                 return List.of("true", "false");
             }
             case 9 -> {
-                return Arrays.stream(ClockDirection.values())
-                        .map(Enum::name)
-                        .filter(s -> s.startsWith(args[8]))
-                        .toList();
+                return List.of("10", "15", "20");
             }
             case 10 -> {
                 return List.of("Arial", "Times New Roman");

@@ -4,7 +4,7 @@ import com.filkond.megaclock.clock.ClockBuilder;
 import com.filkond.megaclock.config.DataConfig;
 import com.filkond.megaclock.config.MessagesConfig;
 import com.filkond.megaclock.config.SettingsConfig;
-import com.filkond.megaclock.clock.ClockObject;
+import com.filkond.megaclock.clock.Clock;
 import com.filkond.megaclock.utils.ClockDirection;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -21,11 +21,11 @@ public final class MegaClockAPI {
     private MessagesConfig messages;
     private SettingsConfig settings;
     private DataConfig data;
-    private final List<ClockObject> clocks = new ArrayList<>();
+    private final List<Clock> clocks = new ArrayList<>();
 
     @Nullable
-    public ClockObject getClock(String name) {
-        for (ClockObject clock : clocks) {
+    public Clock getClock(String name) {
+        for (Clock clock : clocks) {
             if (clock.getName().equalsIgnoreCase(name)) {
                 return clock;
             }
@@ -33,9 +33,9 @@ public final class MegaClockAPI {
         return null;
     }
 
-    public ClockObject createClock(String name, Location location, ZoneId zoneId, ClockDirection direction, Font font, boolean bg, boolean frame) {
+    public Clock createClock(String name, Location location, ZoneId zoneId, ClockDirection direction, Font font, boolean bg, boolean frame) {
         var builder = new ClockBuilder(frame, bg, location, direction, font, List.of(Material.STONE), List.of(Material.COBBLESTONE));
-        var clock = new ClockObject(name, location, zoneId, builder);
+        var clock = new Clock(name, location, zoneId, builder);
         clocks.add(clock);
         return clock;
     }
@@ -52,7 +52,7 @@ public final class MegaClockAPI {
         return data;
     }
 
-    public List<ClockObject> getClocks() {
+    public List<Clock> getClocks() {
         return clocks;
     }
 

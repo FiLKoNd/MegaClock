@@ -1,20 +1,19 @@
 package com.filkond.megaclock.utils;
 
 import com.filkond.megaclock.MegaClock;
-import com.filkond.megaclock.MegaClockAPI;
-import org.bukkit.Location;
-import org.bukkit.block.Block;
+import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.regex.Pattern;
 
 public class FontUtils {
     public static final Font defaultFont;
-
+    private static final Pattern TTF_PATTERN = Pattern.compile("\\D\\.ttf");
+    private static final HashMap<String, Font> FONT_CACHE = new HashMap<>();
+    private static final Pattern URL_PATTERN = Pattern.compile("https?:\\/\\/(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b([-a-zA-Z0-9()@:%_\\+.~#?&//=]*)");
     static {
         try {
             defaultFont = Font.createFont(Font.TRUETYPE_FONT, new File(MegaClock.getInstance().getDataFolder(), "fonts/minecraft-numbers.ttf"))
@@ -24,81 +23,28 @@ public class FontUtils {
         }
     }
 
-    public static BufferedImage getImage(String text, Font font) {
-        var fm = getFontMetrics(font);
-        var img = new BufferedImage(fm.stringWidth(text), fm.getHeight(), BufferedImage.TYPE_INT_RGB);
-        var g2d = img.createGraphics();
-        g2d = img.createGraphics();
-        g2d.setFont(font);
-        fm = g2d.getFontMetrics();
-        g2d.setColor(Color.WHITE);
-        g2d.drawString(text, 0, fm.getAscent());
-        g2d.dispose();
-        return img;
-    }
-
-    public static List<Block> getBlocks(Location loc, BufferedImage image, ClockDirection direction, boolean ignoreEmpty) {
-        List<Block> out = new ArrayList<>();
-        for (int x = 0; x < image.getWidth(); x++) {
-            for (int y = 0; y < image.getHeight(); y++) {
-                int rgb = image.getRGB(x, y);
-                int red = (rgb & 0xff0000) >> 16;
-                int green = (rgb & 0xff00) >> 8;
-                int blue = rgb & 0xff;
-                if (red == 0 && green == 0 && blue == 0 && ignoreEmpty) {
-                    continue;
-                }
-                int xLoc = x * direction.getModVX();
-                int zLoc = x * direction.getModVZ();
-                Block block = loc.clone().add(xLoc, -y, zLoc).getBlock();
-                out.add(block);
-
+    @Nullable
+    public static Font getFont(String name, int size) {
+        if (TTF_PATTERN.matcher(name).matches()) {
+            if (FONT_CACHE.containsKey(name)) {
+                return FONT_CACHE.get(name);
+            } else {
+                return createFont(name);
             }
         }
-        return out;
+        return new Font(name, Font.PLAIN, size);
     }
 
-    public static Location getCharLocation(int index, Location location, ClockDirection direction, Font font, String text) {
-        if (index < 0 || index >= text.length()) {
-            throw new IllegalArgumentException("Index must been less then text length");
+    @Nullable
+    private static Font createFont(String path) {
+        try {
+            var fontFile = new File(MegaClock.getInstance().getDataFolder(), path);
+            var font = Font.createFont(Font.TRUETYPE_FONT, fontFile);
+            FONT_CACHE.put(path, font);
+            return font;
+        } catch (FontFormatException | IOException ignored) {
         }
-
-
-        var fm = FontUtils.getFontMetrics(font);
-        int charWidth = fm.charWidth(text.charAt(index));
-
-
-        int x = index * charWidth;
-        int xLoc = x * direction.getModVX();
-        int zLoc = x * direction.getModVZ();
-
-        var loc = location.clone();
-        loc.setX(loc.getX() + xLoc);
-        loc.setZ(loc.getZ() + zLoc);
-
-        return loc;
+        return null;
     }
 
-    private static FontMetrics getFontMetrics(Font font) {
-        var bimg = new BufferedImage(1, 1, BufferedImage.TYPE_INT_RGB);
-        var g2d = bimg.createGraphics();
-        g2d.setFont(font);
-        FontMetrics fm = g2d.getFontMetrics();
-        g2d.dispose();
-        return fm;
-    }
-
-    public static Location getTextEnd(Location startLoc, String text, Font font, ClockDirection direction) {
-        FontMetrics fm = getFontMetrics(font);
-        var lastCharWidth = fm.charWidth(text.charAt(text.length() - 1)) / 4;
-        var textWidth = fm.stringWidth(text) - lastCharWidth - 1;
-
-        var x = textWidth * direction.getModVX();
-        var y = -fm.getAscent() + 1;
-        var z = textWidth * direction.getModVZ();
-
-        Location loc = startLoc.clone();
-        loc.add(x, y, z);
-        return loc;
-    }
 }

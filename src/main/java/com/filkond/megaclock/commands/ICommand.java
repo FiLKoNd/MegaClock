@@ -4,6 +4,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -18,6 +19,7 @@ public interface ICommand extends CommandExecutor, TabCompleter {
     }
 
     @Override
+    @Nullable
     default List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
         return complete(sender, args);
     }

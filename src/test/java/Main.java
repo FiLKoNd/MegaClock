@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.stream.Collectors;
 
-import static com.filkond.megaclock.utils.FontUtils.getImage;
+import static com.filkond.megaclock.utils.BuildUtils.getImage;
 
 public class Main {
     public static void main(String[] args) {

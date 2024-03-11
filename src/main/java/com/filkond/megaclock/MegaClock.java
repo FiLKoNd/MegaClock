@@ -4,6 +4,7 @@ import com.filkond.megaclock.commands.ClockCommand;
 import com.filkond.megaclock.commands.ICommand;
 import com.filkond.megaclock.commands.sub.CreateCommand;
 import com.filkond.megaclock.commands.sub.DestroyCommand;
+import com.filkond.megaclock.commands.sub.MaterialCommand;
 import com.filkond.megaclock.commands.sub.TimezoneCommand;
 import com.filkond.megaclock.tasks.ClockTask;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -23,7 +24,7 @@ public final class MegaClock extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        saveResource("fonts/minecraft-numbers.ttf", false);
+        saveResource("fonts/minecraft-numbers.ttf", true);
         INSTANCE = this;
         setupCommands();
         new ClockTask().runTaskTimerAsynchronously(this, 0L, 20L);
@@ -34,6 +35,7 @@ public final class MegaClock extends JavaPlugin {
         subcommands.put("create", new CreateCommand());
         subcommands.put("timezone", new TimezoneCommand());
         subcommands.put("destroy", new DestroyCommand());
+        subcommands.put("material", new MaterialCommand());
     }
 
     @Override

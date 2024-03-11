@@ -1,19 +1,10 @@
 package com.filkond.megaclock.commands;
 
 import com.filkond.megaclock.MegaClock;
-import com.filkond.megaclock.MegaClockAPI;
-import com.filkond.megaclock.utils.ClockDirection;
-import com.filkond.megaclock.utils.FontUtils;
 import com.filkond.megaclock.utils.Translator;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.awt.*;
-import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
 public class ClockCommand implements ICommand {

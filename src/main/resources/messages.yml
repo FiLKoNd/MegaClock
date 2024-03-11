@@ -1,4 +1,5 @@
 not-enough-args: "Недостаточно аргументов"
+
 number-format-error: "Вы должны ввести число"
 block-face-error: "неверный аргумент blockface"
 already-exists: "часы с таким названием уже существуют"
@@ -6,12 +7,14 @@ unknown-timezone: "неизвестная часовая зона"
 unknown-clock: "таких часов не существует"
 successfully-created: "вы успешно создали часы"
 unknown-font: "неизвестный шрифт, будет использоваться стандартный"
-successful-change-timezone: "вы усмпешно поменяли тайм зону"
+successful-change-timezone: "вы успешно поменяли тайм зону"
+successful-destroyed: "вы уебали часы"
 
 help-message:
   - "&fПомощь: "
   - "&b/clock create X Y Z <Название> <Background> <Frame> <CLOCKFACE> <FONT>"
   - "&b/clock timezone <Название> <TimeZone>"
   - "&b/clock destroy <Название>"
+  - "&b/clock material CLOCK FIELD add/set MATERIALS (можно через запятую)"
   - "&fАргументы написанные капсом - опциональны"
   - "&fПоддерживаются любые шрифты"

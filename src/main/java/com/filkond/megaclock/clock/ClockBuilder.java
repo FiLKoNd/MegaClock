@@ -2,26 +2,27 @@ package com.filkond.megaclock.clock;
 
 import com.filkond.megaclock.MegaClock;
 import com.filkond.megaclock.utils.ClockDirection;
-import com.filkond.megaclock.utils.FontUtils;
+import com.filkond.megaclock.utils.BuildUtils;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.util.BlockIterator;
-import org.bukkit.util.BoundingBox;
+import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
-public class ClockBuilder {
+public class ClockBuilder implements ConfigurationSerializable {
     private final boolean frame;
     private final boolean background;
     private final Location position;
     protected final ClockDirection direction;
     private final Font font;
-    private final List<Material> charMaterials;
-    private final List<Material> bgMaterials;
+    private List<Material> charMaterials;
+    private List<Material> bgMaterials;
     private final Random random = new Random();
 
 
@@ -35,22 +36,33 @@ public class ClockBuilder {
         this.bgMaterials = bgMaterials;
     }
 
-    public void setup() {
+    public void setup(String time) {
         if (background)
-            buildBg();
+            buildBg(time);
         if (frame)
-            buildFrame();
+            buildFrame(time);
     }
 
-    private void buildFrame() {
-
-    }
-
-    private void buildBg() {
+    private void buildFrame(String time) {
 
     }
 
-    private void clearTerritory(Location startLocation, Location endLocation) {
+    private void buildBg(String time) {
+        fill(getLeftBorder().subtract(direction.getFace().getModX(), 0, direction.getFace().getModZ()),
+                getRightBorder(time).subtract(direction.getFace().getModX(), 0, direction.getFace().getModZ()),
+                bgMaterials);
+    }
+
+    private Location getLeftBorder() {
+        return position.clone().add(-direction.getModVX(), 1, -direction.getModVZ());
+    }
+
+    private Location getRightBorder(String time){
+        return BuildUtils.getTextEnd(position, time, font, direction)
+                .add(direction.getModVX(), -1, direction.getModVZ()); // фулл похуй
+    }
+
+    private void fill(Location startLocation, Location endLocation, List<Material> materials) {
         int minX = Math.min(startLocation.getBlockX(), endLocation.getBlockX());
         int minY = Math.min(startLocation.getBlockY(), endLocation.getBlockY());
         int minZ = Math.min(startLocation.getBlockZ(), endLocation.getBlockZ());
@@ -62,32 +74,27 @@ public class ClockBuilder {
         for (int x = minX; x <= maxX; x++) {
             for (int y = minY; y <= maxY; y++) {
                 for (int z = minZ; z <= maxZ; z++) {
-                    world.getBlockAt(x, y, z).setType(Material.AIR);
+                    world.getBlockAt(x, y, z).setType(getRandomMaterial(materials));
                 }
             }
         }
     }
 
     public void buildChar(int index, char letter, String text) {
-        var charLoc = FontUtils.getCharLocation(index, position, direction, font, text);
-        var blocks = FontUtils.getBlocks(charLoc, FontUtils.getImage(String.valueOf(letter), font), direction, true);
-        var allBlocks = FontUtils.getBlocks(charLoc, FontUtils.getImage(String.valueOf(letter), font), direction, false);
-        for (Block block : allBlocks) {
-            new BukkitRunnable() {
-                @Override
-                public void run() {
+        var charLoc = BuildUtils.getCharLocation(index, position, direction, font, text);
+        var blocks = BuildUtils.getBlocks(charLoc, BuildUtils.getImage(String.valueOf(letter), font), direction, true);
+        var allBlocks = BuildUtils.getBlocks(charLoc, BuildUtils.getImage(String.valueOf(letter), font), direction, false);
+        new BukkitRunnable(){
+            @Override
+            public void run() {
+                for (Block block : allBlocks) {
                     block.setType(Material.AIR);
                 }
-            }.runTask(MegaClock.getInstance());
-        }
-        for (Block block : blocks) {
-            new BukkitRunnable() {
-                @Override
-                public void run() {
+                for (Block block : blocks) {
                     block.setType(getRandomMaterial(charMaterials));
                 }
-            }.runTask(MegaClock.getInstance());
-        }
+            }
+        }.runTask(MegaClock.getInstance());
     }
 
     public Material getRandomMaterial(List<Material> materials) {
@@ -99,5 +106,31 @@ public class ClockBuilder {
 
         var materialIndex = random.nextInt(0, materials.size() - 1);
         return materials.get(materialIndex);
+    }
+
+    @NotNull
+    @Override
+    public Map<String, Object> serialize() {
+        return null;
+    }
+
+    public static Clock deserialize(Map<String, Object> serializedMap) {
+        return null;
+    }
+
+    public List<Material> getCharMaterials() {
+        return charMaterials;
+    }
+
+    public void setCharMaterials(List<Material> charMaterials) {
+        this.charMaterials = charMaterials;
+    }
+
+    public List<Material> getBgMaterials() {
+        return bgMaterials;
+    }
+
+    public void setBgMaterials(List<Material> bgMaterials) {
+        this.bgMaterials = bgMaterials;
     }
 }

@@ -28,7 +28,7 @@ public class Translator {
     }
 
     public static String formatTime(ZonedDateTime time) {
-        return String.format("%s:%s:%s", formatTime(time.getHour()), formatTime(time.getMinute()), formatTime(time.getSecond()));
+        return String.format("%s %s %s", formatTime(time.getHour()), formatTime(time.getMinute()), formatTime(time.getSecond()));
     }
 
     // ужас

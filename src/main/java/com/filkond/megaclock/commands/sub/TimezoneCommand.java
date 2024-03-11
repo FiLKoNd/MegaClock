@@ -1,11 +1,12 @@
 package com.filkond.megaclock.commands.sub;
 
 import com.filkond.megaclock.MegaClockAPI;
+import com.filkond.megaclock.clock.Clock;
 import com.filkond.megaclock.commands.ICommand;
 import com.filkond.megaclock.utils.Translator;
-import org.bukkit.block.BlockFace;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.Nullable;
 
 import java.time.ZoneId;
 import java.time.zone.ZoneRulesException;
@@ -42,7 +43,21 @@ public class TimezoneCommand implements ICommand {
     }
 
     @Override
+    @Nullable
     public List<String> complete(CommandSender sender, String[] args) {
+        switch (args.length) {
+            case 2 -> {
+                return MegaClockAPI.getInstance().getClocks().stream()
+                        .map(Clock::getName)
+                        .toList();
+            }
+            case 3 -> {
+                return ZoneId.getAvailableZoneIds()
+                        .stream()
+                        .filter(s -> s.startsWith(args[2]))
+                        .toList();
+            }
+        }
         return null;
     }
 }
