@@ -28,6 +28,15 @@ public class Translator {
     }
 
     public static String formatTime(ZonedDateTime time) {
-        return String.format("%d:%d:%d", time.getHour(), time.getMinute(), time.getSecond());
+        return String.format("%s:%s:%s", formatTime(time.getHour()), formatTime(time.getMinute()), formatTime(time.getSecond()));
+    }
+
+    // ужас
+    private static String formatTime(int time) {
+        String sTime = String.valueOf(time);
+        if (sTime.length() == 2)
+            return sTime;
+
+        return "0" + sTime;
     }
 }

@@ -1,8 +1,10 @@
 package com.filkond.megaclock.commands;
 
 import com.filkond.megaclock.MegaClock;
+import com.filkond.megaclock.MegaClockAPI;
 import com.filkond.megaclock.utils.ClockDirection;
 import com.filkond.megaclock.utils.FontUtils;
+import com.filkond.megaclock.utils.Translator;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -21,36 +23,31 @@ public class ClockCommand implements ICommand {
             return;
         }
 
-        int cx = player.getLocation().getBlockX();
-        int cy = player.getLocation().getBlockY();
-        int cz = player.getLocation().getBlockZ();
-        try {
-            cx = Integer.parseInt(args[0]);
-            cy = Integer.parseInt(args[1]);
-            cz = Integer.parseInt(args[2]);
-        } catch (NumberFormatException | ArrayIndexOutOfBoundsException ignored) {
+        if (args.length < 1) {
+            for (String msg : Translator.ofList("help-message")) {
+                player.sendMessage(msg);
+            }
+            return;
         }
 
-        var face = player.getFacing();
-        var clockDirection = ClockDirection.getDirection(face.getOppositeFace());
-        Location location = new Location(player.getWorld(), cx, cy, cz);
-//        Font font = new Font("Arial", Font.PLAIN, 18);
-        Font font = FontUtils.defaultFont;
-        var bl = FontUtils.getBlocks(location, FontUtils.getImage("123", font), clockDirection, true);
-        for (Block block : bl) {
-            block.setType(Material.STONE);
+        var cmd = MegaClock.getInstance().getSubcommands().get(args[0]);
+        if (cmd != null) {
+            cmd.execute(sender, args);
         }
-        var charLoc = FontUtils.getCharLocation(1, location, clockDirection, font, "123");
-        var charBlocks = FontUtils.getBlocks(charLoc, FontUtils.getImage("9", font), clockDirection, true);
-        for (Block charBlock : charBlocks) {
-            charBlock.setType(Material.REDSTONE_BLOCK);
-        }
-        var end = FontUtils.getTextEnd(location, "123", font, clockDirection);
-        end.getBlock().setType(Material.DIAMOND_BLOCK);
     }
 
     @Override
     public List<String> complete(CommandSender sender, String[] args) {
+        if (args.length == 1) {
+            return MegaClock.getInstance().getSubcommands().keySet().stream().toList();
+        }
+
+        if (args.length > 1) {
+            var cmd = MegaClock.getInstance().getSubcommands().get(args[0]);
+            if (cmd != null) {
+                return cmd.complete(sender, args);
+            }
+        }
         return null;
     }
 }

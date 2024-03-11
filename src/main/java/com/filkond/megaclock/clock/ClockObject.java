@@ -33,6 +33,7 @@ public class ClockObject {
 
             builder.buildChar(i, formattedTime.charAt(i), timeText);
         }
+        timeText = formattedTime;
     }
 
     @Override

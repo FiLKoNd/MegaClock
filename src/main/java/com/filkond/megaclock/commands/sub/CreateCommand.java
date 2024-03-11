@@ -18,10 +18,12 @@ import java.time.ZonedDateTime;
 import java.time.zone.ZoneRulesException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class CreateCommand implements ICommand {
-    @Override // /clock create X Y Z NAME TIMEZONE BG FRAME FONT BlockFace
+    @Override // /clock create X Y Z NAME TIMEZONE BG FRAME ClockFace Font
     public void execute(CommandSender sender, String[] args) {
         if (!(sender instanceof Player player)) {
             return;
@@ -44,9 +46,9 @@ public class CreateCommand implements ICommand {
 
         var location = new Location(player.getWorld(), x, y, z);
         ClockDirection direction = ClockDirection.getDirection(player.getFacing().getOppositeFace());
-        if (args.length == 10) {
+        if (args.length == 9) {
             try {
-                direction = ClockDirection.valueOf(args[9].toUpperCase());
+                direction = ClockDirection.valueOf(args[8].toUpperCase());
             } catch (IllegalArgumentException exception) {
                 player.sendMessage(Translator.of("block-face-error"));
                 return;
@@ -70,7 +72,12 @@ public class CreateCommand implements ICommand {
 
         Font font = FontUtils.defaultFont;
         if (args.length > 9) {
-            font = Font.getFont(args[8]);
+            StringBuilder sb = new StringBuilder();
+            for (int i = 8; i < args.length; i++) {
+                sb.append(args[i]);
+                sb.append(" ");
+            }
+            font = Font.getFont(sb.toString().replaceAll(" $", ""));
             if (font == null) {
                 player.sendMessage(Translator.of("unknown-font"));
                 return;
@@ -86,13 +93,40 @@ public class CreateCommand implements ICommand {
     @Override
     public List<String> complete(CommandSender sender, String[] args) {
         List<String> out = new ArrayList<>();
-        if (args.length == 6) {
-            return ZoneId.getAvailableZoneIds().stream().toList();
+        if (!(sender instanceof Player player)) {
+            return null;
         }
-        if (args.length == 9) {
-            return Arrays.stream(ClockDirection.values())
-                    .map(Enum::name)
-                    .toList();
+        switch (args.length) {
+            case 2 -> {
+                return List.of(String.valueOf(player.getLocation().getBlockX()));
+            }
+            case 3 -> {
+                return List.of(String.valueOf(player.getLocation().getBlockY()));
+            }
+            case 4 -> {
+                return List.of(String.valueOf(player.getLocation().getBlockZ()));
+            }
+            case 5 -> {
+                return List.of("Название");
+            }
+            case 6 -> {
+                return ZoneId.getAvailableZoneIds()
+                        .stream()
+                        .filter(s -> s.startsWith(args[5]))
+                        .collect(Collectors.toList());
+            }
+            case 7, 8 -> {
+                return List.of("true", "false");
+            }
+            case 9 -> {
+                return Arrays.stream(ClockDirection.values())
+                        .map(Enum::name)
+                        .filter(s -> s.startsWith(args[8]))
+                        .toList();
+            }
+            case 10 -> {
+                return List.of("Arial", "Times New Roman");
+            }
         }
         return null;
     }

@@ -1,10 +1,12 @@
 package com.filkond.megaclock.clock;
 
+import com.filkond.megaclock.MegaClock;
 import com.filkond.megaclock.utils.ClockDirection;
 import com.filkond.megaclock.utils.FontUtils;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.BlockIterator;
 import org.bukkit.util.BoundingBox;
 
@@ -69,8 +71,22 @@ public class ClockBuilder {
     public void buildChar(int index, char letter, String text) {
         var charLoc = FontUtils.getCharLocation(index, position, direction, font, text);
         var blocks = FontUtils.getBlocks(charLoc, FontUtils.getImage(String.valueOf(letter), font), direction, true);
+        var allBlocks = FontUtils.getBlocks(charLoc, FontUtils.getImage(String.valueOf(letter), font), direction, false);
+        for (Block block : allBlocks) {
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    block.setType(Material.AIR);
+                }
+            }.runTask(MegaClock.getInstance());
+        }
         for (Block block : blocks) {
-            block.setType(getRandomMaterial(charMaterials));
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    block.setType(getRandomMaterial(charMaterials));
+                }
+            }.runTask(MegaClock.getInstance());
         }
     }
 

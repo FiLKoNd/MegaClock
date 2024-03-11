@@ -6,12 +6,20 @@ import java.io.File;
 import java.io.IOException;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.stream.Collectors;
 
 import static com.filkond.megaclock.utils.FontUtils.getImage;
 
 public class Main {
     public static void main(String[] args) {
-        printTimes();
+        for (String s : new ArrayList<>(ZoneId.getAvailableZoneIds())
+                .stream()
+                .sorted(Comparator.comparing(s -> !s.startsWith("Europe/")))
+                .collect(Collectors.toList())) {
+            System.out.println(s);
+        }
     }
 
     private static void createPng() {

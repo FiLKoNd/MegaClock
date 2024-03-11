@@ -17,12 +17,16 @@ public final class MegaClock extends JavaPlugin {
     public static MegaClock INSTANCE;
     private final HashMap<String, ICommand> subcommands = new HashMap<>();
 
+    public HashMap<String, ICommand> getSubcommands() {
+        return subcommands;
+    }
+
     @Override
     public void onEnable() {
         saveResource("fonts/minecraft-numbers.ttf", false);
         INSTANCE = this;
         setupCommands();
-        new ClockTask().runTaskTimerAsynchronously(this, 20L, 0L);
+        new ClockTask().runTaskTimerAsynchronously(this, 0L, 20L);
     }
 
     private void setupCommands() {
