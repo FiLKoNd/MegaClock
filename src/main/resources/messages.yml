@@ -3,8 +3,11 @@ number-format-error: "Вы должны ввести число"
 block-face-error: "неверный аргумент blockface"
 already-exists: "часы с таким названием уже существуют"
 unknown-timezone: "неизвестная часовая зона"
+unknown-clock: "таких часов не существует"
 successfully-created: "вы успешно создали часы"
 unknown-font: "неизвестный шрифт, будет использоваться стандартный"
+successful-change-timezone: "вы усмпешно поменяли тайм зону"
+
 help-message:
   - "&fПомощь: "
   - "&b/clock create X Y Z <Название> <Background> <Frame> <CLOCKFACE> <FONT>"

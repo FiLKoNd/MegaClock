@@ -13,7 +13,8 @@ public class ClockObject {
     private final ClockBuilder builder;
     @ArrayLen(8)
     private String timeText = "11:11:11"; // 12:12:12
-    private final ZoneId zoneId;
+    private ZoneId zoneId;
+
 
     public ClockObject(String name, Location startLocation, ZoneId zoneId, ClockBuilder builder) {
         this.name = name;
@@ -55,5 +56,9 @@ public class ClockObject {
 
     public ZoneId getZoneId() {
         return zoneId;
+    }
+
+    public void setZoneId(ZoneId zoneId) {
+        this.zoneId = zoneId;
     }
 }
